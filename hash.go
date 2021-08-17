@@ -4,6 +4,8 @@ import (
 	"context"
 	"strconv"
 
+	goctx "golang.org/x/net/context"
+
 	"github.com/juju/errors"
 	"github.com/pingcap/tidb/kv"
 )
@@ -36,7 +38,7 @@ func HandleHashSet(db kv.Storage, key []byte, field []byte, value []byte) (inter
 			return nil, err
 		}
 
-		value, err := txn.Get(fieldKey)
+		value, err := txn.Get(goctx.Background(), fieldKey)
 		if err != nil && !kv.ErrNotExist.Equal(err) {
 			return nil, err
 		}
@@ -78,7 +80,7 @@ func HandleHashGet(db kv.Storage, key []byte, field []byte) (interface{}, error)
 		return nil, errors.Errorf("invalid type, need %d, but got %d", String, tp)
 	}
 
-	value, err := txn.Get(EncodeHashField(nil, key, field))
+	value, err := txn.Get(goctx.Background(), EncodeHashField(nil, key, field))
 	if err != nil {
 		return nil, err
 	}

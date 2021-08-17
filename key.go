@@ -153,7 +153,8 @@ func HandleDelete(db kv.Storage, key []byte) (interface{}, error) {
 	defer txn.Rollback()
 
 	prefixKey := EncodeBytes(nil, key)
-	it, err := txn.Seek(prefixKey)
+	// it, err := txn.Seek(prefixKey)
+	it, err := txn.Iter(kv.Key(prefixKey), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -184,7 +185,8 @@ func HandleDelete(db kv.Storage, key []byte) (interface{}, error) {
 
 func SeekPrefix(txn kv.Transaction, key []byte) (kv.Iterator, error) {
 	seekKey := EncodeBytes(nil, key)
-	it, err := txn.Seek(seekKey)
+	// it, err := txn.Seek(seekKey)
+	it, err := txn.Iter(kv.Key(seekKey), nil)
 	if err != nil {
 		return nil, err
 	}

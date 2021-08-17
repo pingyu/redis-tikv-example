@@ -33,7 +33,7 @@ func main() {
 	ln, err := net.Listen("tcp", *addr)
 	perror(err)
 
-	tikv.MaxConnectionCount = 128
+	// tikv.MaxConnectionCount = 128
 	driver := tikv.Driver{}
 	db, err := driver.Open(fmt.Sprintf("tikv://%s?disableGC=true", *pdAddr))
 	perror(err)
